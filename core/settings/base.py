@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
-
+import apps.common
 import environ
 
 from core.jazzmin_conf import *  # noqa
@@ -54,6 +54,7 @@ THIRD_PARTY_APPS = [
     "drf_yasg",
     "corsheaders",
 ]
+AUTH_USER_MODEL = "common.CustomUser"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -178,5 +179,3 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
 ##################
-
-AUTH_USER_MODEL = "common.models.CustomUser"

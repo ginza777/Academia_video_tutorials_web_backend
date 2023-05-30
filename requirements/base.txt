@@ -6,3 +6,6 @@ django-jazzmin
 drf-yasg
 djangorestframework
 django-filter
+django-phonenumber-field
+pillow
+phonenumbers
