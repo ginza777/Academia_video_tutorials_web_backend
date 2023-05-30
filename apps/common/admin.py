@@ -27,7 +27,7 @@ class PostCommentsAdmin(admin.ModelAdmin):
 # Register your models here.
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('id','title','price','price_per')
 # Register your models here.
 @admin.register(Starts)
 class StartsAdmin(admin.ModelAdmin):

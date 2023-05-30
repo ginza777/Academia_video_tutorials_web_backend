@@ -32,7 +32,7 @@ SECRET_KEY = env.str("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG")
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['localhost','127.0.0.1:3000','127.0.0.1','http://127.0.0.1:8000/']
 
 # Application definition
 DJANGO_APPS = [
@@ -53,12 +53,24 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "drf_yasg",
     "corsheaders",
+    'rest_framework.authtoken',
+    "phonenumber_field",
+    'django_filters',
 ]
+
 AUTH_USER_MODEL = "common.CustomUser"
+
+
+CORS_ALLOW_METHODS =  [env.str('ALLOWED_HOSTS')]
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
+
+        'rest_framework.authentication.BasicAuthentication',
         "rest_framework.authentication.SessionAuthentication",
+
     ),
     "DEFAULT_FILTER_BACKENDS": (
         "django_filters.rest_framework.DjangoFilterBackend",
@@ -66,7 +78,16 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 10,
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/day',
+        'user': '1000/day'
+    }
 }
+
 
 INSTALLED_APPS = DJANGO_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 
@@ -161,13 +182,13 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # CACHES
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": f"{env.str('REDIS_URL', 'redis://localhost:6379/0')}",
-        "KEY_PREFIX": "boilerplate",  # todo: you must change this with your project name or something else
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.redis.RedisCache",
+#         "LOCATION": f"{env.str('REDIS_URL', 'redis://localhost:6379/0')}",
+#         "KEY_PREFIX": "boilerplate",  # todo: you must change this with your project name or something else
+#     }
+# }
 
 # CELERY CONFIGURATION
 CELERY_BROKER_URL = env.str("CELERY_BROKER_URL", "redis://localhost:6379")
