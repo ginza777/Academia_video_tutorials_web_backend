@@ -32,7 +32,7 @@ SECRET_KEY = env.str("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG")
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1:3000','127.0.0.1','http://127.0.0.1:8000/']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 DJANGO_APPS = [
@@ -83,8 +83,8 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle'
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '100/day',
-        'user': '1000/day'
+        'anon': '10000/day',
+        'user': '10000/day'
     }
 }
 

@@ -1,18 +1,22 @@
 from rest_framework import serializers
 from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
-
+from rest_framework.views import APIView
+import os
 from .models import *
-
 
 # Create your views here.
 
 
 # kurslar
 class CourseSerializer(serializers.ModelSerializer):
+    id=serializers.IntegerField()
     teacher_fistname = serializers.CharField(source='teacher.fistname')
     teacher_lastname = serializers.CharField(source='teacher.lastname')
     teacher_image = serializers.ImageField(source='teacher.image')
+    videos_count = serializers.SerializerMethodField()
 
+    def get_videos_count(self, course):
+        return course.video_set.count()
     class Meta:
         model = Course
         fields = (
@@ -29,8 +33,12 @@ class CourseSerializer(serializers.ModelSerializer):
             'teacher_fistname',
             'teacher_lastname',
             'teacher_image',
+            'videos_count',
 
         )
+
+
+
 
 
 class CoursesListAPIView(ListAPIView):
@@ -44,6 +52,7 @@ class CoursesListAPIView(ListAPIView):
 class CoursesDetailAPIView(RetrieveAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+
 
 
 class CoursesCreateAPIView(CreateAPIView):
@@ -158,10 +167,11 @@ class BlogPostSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source='user.username')
     fist_name = serializers.CharField(source='user.first_name')
     last_name = serializers.CharField(source='user.last_name')
-    image=serializers.ImageField(source='user.avatar')
+    image = serializers.ImageField(source='user.avatar')
+
     class Meta:
         model = PostComments
-        fields =(
+        fields = (
             'id',
             'post',
             'user',
@@ -212,12 +222,14 @@ class PostCommentsDeleteAPIView(DestroyAPIView):
     serializer_class = PostCommentSerializer
     queryset = PostComments.objects.all()
 
-#news
+
+# news
 
 class NewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
         fields = '__all__'
+
 
 class NewsListAPIView(ListAPIView):
     serializer_class = NewsSerializer
@@ -226,6 +238,32 @@ class NewsListAPIView(ListAPIView):
     def get_queryset(self):
         return News.objects.all()
 
+
 class NewsCreateAPIView(CreateAPIView):
     serializer_class = NewsSerializer
     queryset = News.objects.all()
+
+
+# test
+
+class VideoSerializer(serializers.ModelSerializer):
+    file_path = serializers.SerializerMethodField()
+
+    def get_file_path(self, obj):
+        return obj.file.url
+
+    class Meta:
+        model = Video
+        fields = ['title', 'file', 'file_path']
+
+class CoursesDetailVideoAPIView(ListAPIView):
+    serializer_class = VideoSerializer
+    def get_queryset(self, *args, **kwargs):
+        course_id = self.kwargs['pk']
+        return Video.objects.filter(course_id=course_id)
+
+
+
+
+
+

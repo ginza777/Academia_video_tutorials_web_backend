@@ -11,6 +11,12 @@ urlpatterns = [
     path('courses/update/<int:pk>/', CoursesUpdateAPIView.as_view()),
     path('courses/delete/<int:pk>/', CoursesDeleteAPIView.as_view()),
 
+    #videos
+
+    path('courses/<int:pk>/videos/', CoursesDetailVideoAPIView.as_view()),
+
+
+
     #teachers
 
     path('teachers/', TeachersListAPIView.as_view()),
@@ -44,6 +50,7 @@ urlpatterns = [
 
     path('news/', NewsListAPIView.as_view()),
     path('news/create/', NewsCreateAPIView.as_view()),
+
 
 
 

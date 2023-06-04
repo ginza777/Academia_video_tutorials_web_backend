@@ -169,3 +169,23 @@ class Starts(models.Model):
         verbose_name_plural = 'Starts'
         verbose_name = 'Start'
         db_table = 'starts'
+
+
+#test
+
+
+class Video(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE,default=1)
+    title = models.CharField(max_length=255)
+    file = models.FileField(upload_to='videos/')
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name_plural = 'Videos'
+        verbose_name = 'Video'
+        db_table = 'Videos'
+
+
+
