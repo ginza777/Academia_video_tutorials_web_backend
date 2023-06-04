@@ -121,9 +121,15 @@ class ContactCreateAPIView(CreateAPIView):
 # blogposts
 
 class BlogpostSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='author.username')
+    created_at = serializers.DateTimeField(format='%Y-%m-%d', read_only=True)
+    comments_count = serializers.SerializerMethodField()
+
+    def get_comments_count(self, blogpost):
+        return blogpost.postcomments_set.count()
     class Meta:
         model = Blogpost
-        fields = '__all__'
+        fields =('id','title','image','description','created_at','username','comments_count')
 
 
 class BlogpostsListAPIView(ListAPIView):

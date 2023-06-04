@@ -107,6 +107,7 @@ class Blogpost(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     token_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE,default=1)
 
     def __str__(self):
         return self.title
