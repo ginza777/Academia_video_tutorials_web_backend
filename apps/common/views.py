@@ -1,15 +1,123 @@
-from rest_framework import serializers
-from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
-from rest_framework.views import APIView
-import os
-from .models import *
-
+from django.contrib.auth import authenticate
+from django.contrib.auth.hashers import make_password
 # Create your views here.
+# auth serializers
+from rest_framework import serializers
+from rest_framework import status
+from rest_framework.generics import ListAPIView, RetrieveAPIView, CreateAPIView, UpdateAPIView, DestroyAPIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+
+from .models import *
+from .models import CustomUser
+
+
+class CustomUserSerializerLogin(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField()
+    def validate(self, data):
+        email = data.get('email')
+        password = data.get('password')
+        if email and password:
+            user = authenticate(email=email, password=password)
+            if user:
+                if not user.is_active:
+                    raise serializers.ValidationError('User account is disabled.')
+            else:
+                raise serializers.ValidationError('Unable to log in with provided credentials.')
+        else:
+            raise serializers.ValidationError('Must include "email" and "password".')
+
+        data['user'] = user
+        return data
+
+
+class CustomUserSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(max_length=128, min_length=9, write_only=True)
+    phone = serializers.CharField(max_length=20, min_length=13, write_only=True)
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'email', 'phone', 'password']
+
+
+    def create(self, validated_data):
+        # Retrieve the password from validated_data
+        password = validated_data.pop('password')
+
+        # Hash and encrypt the password using Django's make_password function
+        hashed_password = make_password(password)
+
+        # Create the user using the remaining validated_data and the hashed password
+        user = CustomUser.objects.create(password=hashed_password, **validated_data)
+        return user
+
+
+class CustomUserSerializerDelete(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ['email', 'password']
+        extra_kwargs = {'password': {'write_only': True}}
+
+
+# auth views
+
+class CustomUserRegister(CreateAPIView):
+    serializer_class = CustomUserSerializer
+    # serializer_class = serializers.UserSerializer
+    queryset = CustomUser.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+
+class DeleteUser(APIView):
+    serializer_class = CustomUserSerializerDelete
+    queryset = CustomUser.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        print(request)
+        print(self.request.user)
+        user = CustomUser.objects.get(username=self.request.user)
+        date_now = f"{timezone.now().strftime('%Y-%m-%d %H:%M')}"
+        user.username = f"{date_now}_deleted_{user.username}"
+        user.email = f"{date_now}_deleted_{user.email}"
+        user.phone = f"{date_now}_deleted_{user.phone}"
+        user.is_active = False
+        user.is_staff = False
+        user.is_superuser = False
+        user.save()
+        comment = "User deleted"
+        return Response(status=status.HTTP_200_OK, data={"comment": comment})
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        # Add custom claims
+        token['username'] = user.username
+        token['email'] = user.email
+
+        return token
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+
+
+class CustomAuthToken(TokenObtainPairView):
+    queryset = CustomUser.objects.all()
+    serializers_class = CustomUserSerializerLogin
 
 
 # kurslar
 class CourseSerializer(serializers.ModelSerializer):
-    id=serializers.IntegerField()
+    id = serializers.IntegerField()
     teacher_fistname = serializers.CharField(source='teacher.fistname')
     teacher_lastname = serializers.CharField(source='teacher.lastname')
     teacher_image = serializers.ImageField(source='teacher.image')
@@ -17,6 +125,7 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def get_videos_count(self, course):
         return course.video_set.count()
+
     class Meta:
         model = Course
         fields = (
@@ -38,9 +147,6 @@ class CourseSerializer(serializers.ModelSerializer):
         )
 
 
-
-
-
 class CoursesListAPIView(ListAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
@@ -52,7 +158,6 @@ class CoursesListAPIView(ListAPIView):
 class CoursesDetailAPIView(RetrieveAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-
 
 
 class CoursesCreateAPIView(CreateAPIView):
@@ -127,9 +232,10 @@ class BlogpostSerializer(serializers.ModelSerializer):
 
     def get_comments_count(self, blogpost):
         return blogpost.postcomments_set.count()
+
     class Meta:
         model = Blogpost
-        fields =('id','title','image','description','created_at','username','comments_count')
+        fields = ('id', 'title', 'image', 'description', 'created_at', 'username', 'comments_count')
 
 
 class BlogpostsListAPIView(ListAPIView):
@@ -262,14 +368,10 @@ class VideoSerializer(serializers.ModelSerializer):
         model = Video
         fields = ['title', 'file', 'file_path']
 
+
 class CoursesDetailVideoAPIView(ListAPIView):
     serializer_class = VideoSerializer
+
     def get_queryset(self, *args, **kwargs):
         course_id = self.kwargs['pk']
         return Video.objects.filter(course_id=course_id)
-
-
-
-
-
-

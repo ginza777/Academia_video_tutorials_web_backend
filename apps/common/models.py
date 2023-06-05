@@ -28,8 +28,8 @@ class CustomUser(AbstractUser):
     privaligies = models.CharField(max_length=150, choices=Choice.choices, default=Choice.customer)
     token_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     avatar = models.ImageField(upload_to='images/user/avatar/', blank=True)
-    USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = []
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
 
     class Meta:
         verbose_name_plural = 'CustomUser'
