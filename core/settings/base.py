@@ -120,7 +120,7 @@ ROOT_URLCONF = "core.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [BASE_DIR / "templates/build"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -183,10 +183,15 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
+#static  for react
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "static"
-STATICFILES_DIRS = (BASE_DIR / "staticfiles",)
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'templates', 'build', 'static'),
+]
+
+
+
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
