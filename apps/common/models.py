@@ -107,7 +107,7 @@ class Blogpost(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     token_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE,default=1)
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return self.title
@@ -120,8 +120,7 @@ class Blogpost(models.Model):
 
 class PostComments(models.Model):
     post = models.ForeignKey(Blogpost, on_delete=models.CASCADE)
-    user= models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -172,11 +171,11 @@ class Starts(models.Model):
         db_table = 'starts'
 
 
-#test
+# test
 
 
 class Video(models.Model):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE,default=1)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, default=1)
     title = models.CharField(max_length=255)
     file = models.FileField(upload_to='videos/')
 
@@ -187,6 +186,3 @@ class Video(models.Model):
         verbose_name_plural = 'Videos'
         verbose_name = 'Video'
         db_table = 'Videos'
-
-
-
