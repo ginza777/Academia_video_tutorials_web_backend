@@ -71,6 +71,7 @@ class CustomUserRegister(CreateAPIView):
     queryset = CustomUser.objects.all()
 
     def post(self, request, *args, **kwargs):
+        print(self.request)
         return self.create(request, *args, **kwargs)
 
 
