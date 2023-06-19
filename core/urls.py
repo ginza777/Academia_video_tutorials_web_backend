@@ -6,16 +6,12 @@ from django.urls import path, include
 from .schema import swagger_urlpatterns
 
 
-def HomeView(request):
-    return render(request, 'index.html')
-
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path("api/", include("apps.common.urls")),
     path("api/", include("apps.authentication.urls")),
-    path("", HomeView, name="home"),
+  
 ]
 
 urlpatterns += swagger_urlpatterns

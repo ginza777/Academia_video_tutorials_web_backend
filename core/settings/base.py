@@ -32,7 +32,7 @@ SECRET_KEY = env.str("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG")
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['174.138.56.216', 'admin.crm.co.uz', '.admin.crm.co.uz', 'crm.co.uz']
 
 # Application definition
 DJANGO_APPS = [
@@ -74,9 +74,13 @@ THIRD_PARTY_APPS = [
 AUTH_USER_MODEL = "common.CustomUser"
 
 
-CORS_ALLOW_METHODS =  [env.str('ALLOWED_HOSTS')]
+
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
+
+
+
+
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -184,11 +188,30 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 #static  for react
+
+
+
+
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import os
+
+
+
 STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "static"
+
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'templates', 'build', 'static'),
+    BASE_DIR / "static",
 ]
+
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+
+
+
+
+
 
 
 

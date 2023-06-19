@@ -4,8 +4,6 @@ from .base import *  # noqa
 # General
 ###################################################################
 
-DEBUG = False
-
 ###################################################################
 # Django security
 ###################################################################
@@ -14,9 +12,7 @@ USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 CSRF_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS = [
-    "https://example.com"
-]
+CSRF_TRUSTED_ORIGINS = ['174.138.56.216', 'admin.crm.co.uz', '.admin.crm.co.uz', 'crm.co.uz']
 
 ###################################################################
 # CORS
