@@ -1,0 +1,25 @@
+[0;1;32m●[0m gunicorn.service - gunicorn daemon
+     Loaded: loaded (/etc/systemd/system/gunicorn.service; disabled; vendor preset: enabled)
+     Active: [0;1;32mactive (running)[0m since Tue 2023-06-20 20:31:19 UTC; 28s ago
+TriggeredBy: [0;1;32m●[0m gunicorn.socket
+   Main PID: 74920 (gunicorn)
+      Tasks: 6 (limit: 9492)
+     Memory: 191.5M
+        CPU: 2.762s
+     CGroup: /system.slice/gunicorn.service
+             ├─74920 /var/www/projects/backend/academia_backend/venv/bin/python3 /var/www/projects/backend/academia_backend/venv/bin/gunicorn --access-logfile - --workers 5 --bind unix:/run/gunicorn.sock core.wsgi:application
+             ├─74921 /var/www/projects/backend/academia_backend/venv/bin/python3 /var/www/projects/backend/academia_backend/venv/bin/gunicorn --access-logfile - --workers 5 --bind unix:/run/gunicorn.sock core.wsgi:application
+             ├─74922 /var/www/projects/backend/academia_backend/venv/bin/python3 /var/www/projects/backend/academia_backend/venv/bin/gunicorn --access-logfile - --workers 5 --bind unix:/run/gunicorn.sock core.wsgi:application
+             ├─74923 /var/www/projects/backend/academia_backend/venv/bin/python3 /var/www/projects/backend/academia_backend/venv/bin/gunicorn --access-logfile - --workers 5 --bind unix:/run/gunicorn.sock core.wsgi:application
+             ├─74924 /var/www/projects/backend/academia_backend/venv/bin/python3 /var/www/projects/backend/academia_backend/venv/bin/gunicorn --access-logfile - --workers 5 --bind unix:/run/gunicorn.sock core.wsgi:application
+             └─74925 /var/www/projects/backend/academia_backend/venv/bin/python3 /var/www/projects/backend/academia_backend/venv/bin/gunicorn --access-logfile - --workers 5 --bind unix:/run/gunicorn.sock core.wsgi:application
+
+Jun 20 20:31:19 sherzamon systemd[1]: Started gunicorn daemon.
+Jun 20 20:31:19 sherzamon gunicorn[74920]: [2023-06-20 20:31:19 +0000] [74920] [INFO] Starting gunicorn 20.1.0
+Jun 20 20:31:19 sherzamon gunicorn[74920]: [2023-06-20 20:31:19 +0000] [74920] [INFO] Listening at: unix:/run/gunicorn.sock (74920)
+Jun 20 20:31:19 sherzamon gunicorn[74920]: [2023-06-20 20:31:19 +0000] [74920] [INFO] Using worker: sync
+Jun 20 20:31:19 sherzamon gunicorn[74921]: [2023-06-20 20:31:19 +0000] [74921] [INFO] Booting worker with pid: 74921
+Jun 20 20:31:19 sherzamon gunicorn[74922]: [2023-06-20 20:31:19 +0000] [74922] [INFO] Booting worker with pid: 74922
+Jun 20 20:31:19 sherzamon gunicorn[74923]: [2023-06-20 20:31:19 +0000] [74923] [INFO] Booting worker with pid: 74923
+Jun 20 20:31:19 sherzamon gunicorn[74924]: [2023-06-20 20:31:19 +0000] [74924] [INFO] Booting worker with pid: 74924
+Jun 20 20:31:19 sherzamon gunicorn[74925]: [2023-06-20 20:31:19 +0000] [74925] [INFO] Booting worker with pid: 74925
