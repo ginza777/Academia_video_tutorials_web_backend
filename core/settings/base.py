@@ -32,7 +32,7 @@ SECRET_KEY = env.str("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DEBUG")
 
-ALLOWED_HOSTS = ['174.138.56.216', 'admin.crm.co.uz', '.admin.crm.co.uz', 'crm.co.uz']
+ALLOWED_HOSTS = ['174.138.56.216', 'admin.crm.co.uz', '.admin.crm.co.uz', 'crm.co.uz','localhost','localhost:8000','127.0.0.1','127.0.0.1:8000']
 
 # Application definition
 DJANGO_APPS = [
