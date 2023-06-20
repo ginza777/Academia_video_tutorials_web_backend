@@ -304,7 +304,7 @@ class BlogpostsDetailCommentsAPIView(ListAPIView):
     serializer_class = BlogPostSerializer
 
     def get_queryset(self):
-        post_id = self.kwargs['pk']
+        post_id = self.kwargs['id']
         return PostComments.objects.filter(post_id=post_id)
 
 
@@ -374,5 +374,5 @@ class CoursesDetailVideoAPIView(ListAPIView):
     serializer_class = VideoSerializer
 
     def get_queryset(self, *args, **kwargs):
-        course_id = self.kwargs['pk']
+        course_id = self.kwargs['id']
         return Video.objects.filter(course_id=course_id)
