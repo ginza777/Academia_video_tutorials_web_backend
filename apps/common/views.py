@@ -116,9 +116,6 @@ class CustomAuthToken(TokenObtainPairView):
     serializers_class = CustomUserSerializerLogin
 
 
-
-
-
 # kurslar
 class CourseSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
@@ -171,6 +168,7 @@ class CoursesDetailAPIView(RetrieveAPIView):
 class CoursesCreateAPIView(CreateAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+
     def get_queryset(self):
         return Course.objects.all()
 
@@ -210,6 +208,7 @@ class TeachersDetailAPIView(RetrieveAPIView):
     serializer_class = TeacherSerializer
     queryset = Teacher.objects.all()
 
+    @swagger_auto_schema(operation_description="Get teacher by id")
     def get_queryset(self):
         return Teacher.objects.all()
 
@@ -281,6 +280,7 @@ class BlogpostsDetailAPIView(RetrieveAPIView):
     serializer_class = BlogpostSerializer
     queryset = Blogpost.objects.all()
 
+    @swagger_auto_schema(operation_description="Get blogpost by id")
     def get_queryset(self):
         return Blogpost.objects.all()
 
@@ -344,7 +344,9 @@ class BlogPostSerializer(serializers.ModelSerializer):
 
 class BlogpostsDetailCommentsAPIView(ListAPIView):
     serializer_class = BlogPostSerializer
+    queryset = PostComments.objects.all()
 
+    @swagger_auto_schema(operation_description="Get comments by post id")
     def get_queryset(self):
         post_id = self.kwargs['id']
         return PostComments.objects.filter(post_id=post_id)
@@ -362,6 +364,7 @@ class PostCommentsDetailAPIView(RetrieveAPIView):
     serializer_class = PostCommentSerializer
     queryset = PostComments.objects.all()
 
+    @swagger_auto_schema(operation_description="Get comment by id")
     def get_queryset(self):
         return PostComments.objects.all()
 
