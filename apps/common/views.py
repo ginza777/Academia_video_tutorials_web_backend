@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-
+from drf_yasg.utils import swagger_auto_schema
 from .models import *
 from .models import CustomUser
 
@@ -18,6 +18,7 @@ from .models import CustomUser
 class CustomUserSerializerLogin(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
+
     def validate(self, data):
         email = data.get('email')
         password = data.get('password')
@@ -42,7 +43,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['username', 'email', 'phone', 'password']
-
 
     def create(self, validated_data):
         # Retrieve the password from validated_data
@@ -116,6 +116,9 @@ class CustomAuthToken(TokenObtainPairView):
     serializers_class = CustomUserSerializerLogin
 
 
+
+
+
 # kurslar
 class CourseSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
@@ -160,20 +163,32 @@ class CoursesDetailAPIView(RetrieveAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
+    @swagger_auto_schema(operation_description="Get course by id")
+    def get_queryset(self):
+        return Course.objects.all()
+
 
 class CoursesCreateAPIView(CreateAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+    def get_queryset(self):
+        return Course.objects.all()
 
 
 class CoursesUpdateAPIView(UpdateAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
 
+    def get_queryset(self):
+        return Course.objects.all()
+
 
 class CoursesDeleteAPIView(DestroyAPIView):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
+
+    def get_queryset(self):
+        return Course.objects.all()
 
 
 # teachers
@@ -195,20 +210,32 @@ class TeachersDetailAPIView(RetrieveAPIView):
     serializer_class = TeacherSerializer
     queryset = Teacher.objects.all()
 
+    def get_queryset(self):
+        return Teacher.objects.all()
+
 
 class TeachersCreateAPIView(CreateAPIView):
     serializer_class = TeacherSerializer
     queryset = Teacher.objects.all()
+
+    def get_queryset(self):
+        return Teacher.objects.all()
 
 
 class TeachersUpdateAPIView(UpdateAPIView):
     serializer_class = TeacherSerializer
     queryset = Teacher.objects.all()
 
+    def get_queryset(self):
+        return Teacher.objects.all()
+
 
 class TeachersDeleteAPIView(DestroyAPIView):
     serializer_class = TeacherSerializer
     queryset = Teacher.objects.all()
+
+    def get_queryset(self):
+        return Teacher.objects.all()
 
 
 # contact_us
@@ -222,6 +249,9 @@ class ContactSerializer(serializers.ModelSerializer):
 class ContactCreateAPIView(CreateAPIView):
     serializer_class = ContactSerializer
     queryset = Contact.objects.all()
+
+    def get_queryset(self):
+        return Contact.objects.all()
 
 
 # blogposts
@@ -251,20 +281,32 @@ class BlogpostsDetailAPIView(RetrieveAPIView):
     serializer_class = BlogpostSerializer
     queryset = Blogpost.objects.all()
 
+    def get_queryset(self):
+        return Blogpost.objects.all()
+
 
 class BlogpostsCreateAPIView(CreateAPIView):
     serializer_class = BlogpostSerializer
     queryset = Blogpost.objects.all()
+
+    def get_queryset(self):
+        return Blogpost.objects.all()
 
 
 class BlogpostsUpdateAPIView(UpdateAPIView):
     serializer_class = BlogpostSerializer
     queryset = Blogpost.objects.all()
 
+    def get_queryset(self):
+        return Blogpost.objects.all()
+
 
 class BlogpostsDeleteAPIView(DestroyAPIView):
     serializer_class = BlogpostSerializer
     queryset = Blogpost.objects.all()
+
+    def get_queryset(self):
+        return Blogpost.objects.all()
 
 
 # post_comments
@@ -320,20 +362,32 @@ class PostCommentsDetailAPIView(RetrieveAPIView):
     serializer_class = PostCommentSerializer
     queryset = PostComments.objects.all()
 
+    def get_queryset(self):
+        return PostComments.objects.all()
+
 
 class PostCommentsCreateAPIView(CreateAPIView):
     serializer_class = PostCommentSerializer
     queryset = PostComments.objects.all()
+
+    def get_queryset(self):
+        return PostComments.objects.all()
 
 
 class PostCommentsUpdateAPIView(UpdateAPIView):
     serializer_class = PostCommentSerializer
     queryset = PostComments.objects.all()
 
+    def get_queryset(self):
+        return PostComments.objects.all()
+
 
 class PostCommentsDeleteAPIView(DestroyAPIView):
     serializer_class = PostCommentSerializer
     queryset = PostComments.objects.all()
+
+    def get_queryset(self):
+        return PostComments.objects.all()
 
 
 # news
@@ -356,6 +410,9 @@ class NewsCreateAPIView(CreateAPIView):
     serializer_class = NewsSerializer
     queryset = News.objects.all()
 
+    def get_queryset(self):
+        return News.objects.all()
+
 
 # test
 
@@ -373,6 +430,7 @@ class VideoSerializer(serializers.ModelSerializer):
 class CoursesDetailVideoAPIView(ListAPIView):
     serializer_class = VideoSerializer
 
+    @swagger_auto_schema(operation_description="Retrieve videos for a specific course")
     def get_queryset(self, *args, **kwargs):
         course_id = self.kwargs['id']
         return Video.objects.filter(course_id=course_id)
