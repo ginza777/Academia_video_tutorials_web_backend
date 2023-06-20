@@ -19,10 +19,10 @@ urlpatterns = [
     path('delete/', DeleteUser.as_view(), name='delete'),
     # courses
     path('courses/', CoursesListAPIView.as_view()),
-    path('courses/<int:id>/', CoursesDetailAPIView.as_view()),
+    path('courses/<int:pk>/', CoursesDetailAPIView.as_view()),
     path('courses/create/', CoursesCreateAPIView.as_view()),
-    path('courses/update/<int:id>/', CoursesUpdateAPIView.as_view()),
-    path('courses/delete/<int:id>/', CoursesDeleteAPIView.as_view()),
+    path('courses/update/<int:pk>/', CoursesUpdateAPIView.as_view()),
+    path('courses/delete/<int:pk>/', CoursesDeleteAPIView.as_view()),
     # videos
     path('courses/<int:id>/videos/', CoursesDetailVideoAPIView.as_view()),
     # teachers
